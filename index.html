@@ -1,0 +1,323 @@
+<!DOCTYPE html>  
+<html lang="zh">  
+<head>  
+  <meta charset="UTF-8" />  
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />  
+  <title>健身记录 · 高端版</title>  
+  <script src="https://cdn.tailwindcss.com"></script>  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>  
+</head>  
+<body class="bg-gray-100 text-gray-800 font-sans min-h-screen">  
+  <header class="sticky top-0 bg-gradient-to-r from-teal-500 to-cyan-500 text-white py-3 shadow-md z-10">  
+    <h1 class="text-xl font-bold text-center">我的健身追踪</h1>  
+  </header>  
+
+  <main class="max-w-md mx-auto pt-4 pb-24 px-4">  
+    <div class="grid grid-cols-2 gap-4 mb-4">  
+      <button class="rounded-xl p-3 bg-gradient-to-r from-teal-400 to-cyan-400 text-white font-semibold shadow-md" onclick="showSection('training')">训练计划</button>  
+      <button class="rounded-xl p-3 bg-gradient-to-r from-teal-400 to-cyan-400 text-white font-semibold shadow-md" onclick="showSection('diet')">饮食计划</button>  
+      <button class="rounded-xl p-3 bg-gradient-to-r from-teal-400 to-cyan-400 text-white font-semibold shadow-md" onclick="showSection('shopping')">购物清单</button>  
+      <button class="rounded-xl p-3 bg-gradient-to-r from-teal-400 to-cyan-400 text-white font-semibold shadow-md" onclick="showSection('guide')">动作指南</button>  
+      <button class="col-span-2 rounded-xl p-3 bg-gradient-to-r from-teal-400 to-cyan-400 text-white font-semibold shadow-md" onclick="showSection('weightTracker')">体重记录 (含图表)</button>  
+    </div>  
+
+    <div id="sectionContent" class="bg-white shadow-md rounded-xl p-4">  
+      <!-- 训练计划 -->  
+      <section id="training" class="hidden">  
+        <h2 class="text-lg font-bold mb-3 text-teal-600">训练计划</h2>  
+        <ul class="list-disc list-inside space-y-2 text-sm leading-relaxed">  
+          <li><button class="text-teal-700" onclick="showTrainingDetails('monday')">周一</button></li>  
+          <li><button class="text-teal-700" onclick="showTrainingDetails('tuesday')">周二</button></li>  
+          <li><button class="text-teal-700" onclick="showTrainingDetails('wednesday')">周三</button></li>  
+          <li><button class="text-teal-700" onclick="showTrainingDetails('thursday')">周四</button></li>  
+          <li><button class="text-teal-700" onclick="showTrainingDetails('friday')">周五</button></li>  
+          <li><button class="text-teal-700" onclick="showTrainingDetails('saturday')">周六</button></li>  
+          <li><button class="text-teal-700" onclick="showTrainingDetails('sunday')">周日</button></li>  
+        </ul>  
+        <div id="trainingDetails" class="mt-4 hidden">  
+          <h3 class="text-md font-bold text-teal-600" id="trainingTitle"></h3>  
+          <ul id="trainingExercises" class="list-disc list-inside space-y-1 text-sm leading-relaxed"></ul>  
+        </div>  
+      </section>  
+
+      <!-- 饮食计划 -->  
+      <section id="diet" class="hidden">  
+        <h2 class="text-lg font-bold mb-3 text-teal-600">饮食计划</h2>  
+        <ul class="list-disc list-inside space-y-2 text-sm leading-relaxed">  
+          <li><button class="text-teal-700" onclick="showDietDetails('monday')">周一</button></li>  
+          <li><button class="text-teal-700" onclick="showDietDetails('tuesday')">周二</button></li>  
+          <li><button class="text-teal-700" onclick="showDietDetails('wednesday')">周三</button></li>  
+          <li><button class="text-teal-700" onclick="showDietDetails('thursday')">周四</button></li>  
+          <li><button class="text-teal-700" onclick="showDietDetails('friday')">周五</button></li>  
+          <li><button class="text-teal-700" onclick="showDietDetails('saturday')">周六</button></li>  
+          <li><button class="text-teal-700" onclick="showDietDetails('sunday')">周日</button></li>  
+        </ul>  
+        <div id="dietDetails" class="mt-4 hidden">  
+          <h3 class="text-md font-bold text-teal-600" id="dietTitle"></h3>  
+          <ul id="dietRecipes" class="list-disc list-inside space-y-1 text-sm leading-relaxed"></ul>  
+        </div>  
+      </section>  
+
+      <!-- 购物清单 -->  
+      <section id="shopping" class="hidden">  
+        <h2 class="text-lg font-bold mb-3 text-teal-600">本周购物清单</h2>  
+        <ul class="space-y-2 text-sm leading-relaxed">  
+          <li><strong class="text-teal-700">蛋白质类：</strong> 鸡胸肉（500g）、三文鱼（300g）、鳕鱼（400g）</li>  
+          <li><strong class="text-teal-700">主食类：</strong> 糙米（1kg）、藜麦（500g）、全麦面包（1包）</li>  
+          <li><strong class="text-teal-700">蔬菜类：</strong> 西兰花（300g）、菠菜（200g）、青椒（3个）</li>  
+          <li><strong class="text-teal-700">调料：</strong> 橄榄油、盐、黑胡椒、酱油</li>  
+        </ul>  
+      </section>  
+
+      <!-- 动作指南 -->  
+      <section id="guide" class="hidden">  
+        <h2 class="text-lg font-bold mb-3 text-teal-600">训练动作指南</h2>  
+        <ul class="list-disc list-inside space-y-2 text-sm leading-relaxed">  
+          <li><strong class="text-teal-700">平板杠铃卧推：</strong> 肘部微收，下放吸气、推起呼气，核心收紧</li>  
+          <li><strong class="text-teal-700">哑铃上斜卧推：</strong> 上斜15-30°，稳住肩关节，避免过度外展肘</li>  
+          <li><strong class="text-teal-700">深蹲：</strong> 双脚与肩同宽，保持背部挺直，膝盖不超过脚尖</li>  
+          <li><strong class="text-teal-700">硬拉：</strong> 保持背部直立，双手握住杠铃，腿部发力</li>  
+          <li><strong class="text-teal-700">卷腹：</strong> 躺下，双手放在耳边，收腹抬起上身</li>  
+        </ul>  
+      </section>  
+
+      <!-- 体重记录(带图表) -->  
+      <section id="weightTracker" class="hidden">  
+        <h2 class="text-lg font-bold mb-3 text-teal-600">体重记录 (含折线图)</h2>  
+        <label for="weightInput" class="block mb-1 text-sm font-medium text-gray-700">输入今日体重 (kg):</label>  
+        <div class="flex items-center mb-4">  
+          <input id="weightInput" type="number" step="0.1" class="flex-1 border border-gray-300 rounded-l-md px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-teal-300" placeholder="示例: 66.5" />  
+          <button class="bg-teal-500 text-white px-4 py-1.5 rounded-r-md font-semibold hover:bg-teal-600 transition-colors" onclick="addWeight()">记录</button>  
+        </div>  
+
+        <div id="weightList" class="text-sm text-gray-700 mb-4 space-y-1"></div>  
+        <button class="bg-teal-500 text-white px-4 py-1.5 rounded-md font-semibold hover:bg-teal-600 transition-colors" onclick="checkIn()">打卡</button>  
+        <canvas id="weightChart" width="400" height="300"></canvas>  
+      </section>  
+    </div>  
+  </main>  
+
+  <footer class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-300 py-2">  
+    <div class="text-center text-xs text-gray-400">© 2024 健身计划 · 高端版 PWA</div>  
+  </footer>  
+
+  <script>  
+    function showSection(sectionId) {  
+      document.querySelectorAll('#sectionContent > section').forEach(sec => {  
+        sec.classList.add('hidden');  
+      });  
+      document.getElementById(sectionId).classList.remove('hidden');  
+      // 隐藏训练和饮食的详细信息  
+      document.getElementById('trainingDetails').classList.add('hidden');  
+      document.getElementById('dietDetails').classList.add('hidden');  
+    }  
+    showSection('training'); // 默认显示  
+
+    // 训练计划详细信息  
+    function showTrainingDetails(day) {  
+      const trainingDetails = {  
+        monday: {  
+          title: "周一：胸部 + 三头肌 + 有氧",  
+          exercises: [  
+            "平板杠铃卧推：3组8-10次",  
+            "哑铃上斜卧推：3组8-10次",  
+            "绳索下压：3组10-12次",  
+            "机械飞鸟：3组10-12次",  
+            "有氧：30分钟"  
+          ]  
+        },  
+        tuesday: {  
+          title: "周二：背部 + 二头肌 + 有氧",  
+          exercises: [  
+            "高位下拉：3组8-10次",  
+            "坐姿划船：3组8-10次",  
+            "哑铃弯举：3组10-12次",  
+            "绳索面拉：3组10-12次",  
+            "有氧：30分钟"  
+          ]  
+        },  
+        wednesday: {  
+          title: "周三：腿部 + 腹部",  
+          exercises: [  
+            "深蹲：3组8-10次",  
+            "腿举：3组10-12次",  
+            "硬拉：3组8-10次",  
+            "仰卧起坐：3组15次"  
+          ]  
+        },  
+        thursday: {  
+          title: "周四：肩部 + 腹部",  
+          exercises: [  
+            "哑铃推举：3组8-10次",  
+            "侧平举：3组10-12次",  
+            "卷腹：3组15次"  
+          ]  
+        },  
+        friday: {  
+          title: "周五：全身有氧",  
+          exercises: [  
+            "HIIT训练：30分钟"  
+          ]  
+        },  
+        saturday: {  
+          title: "周六：休息",  
+          exercises: ["休息，恢复"]  
+        },  
+        sunday: {  
+          title: "周日：拉伸与恢复",  
+          exercises: ["全身拉伸：30分钟"]  
+        }  
+      };  
+
+      const details = trainingDetails[day];  
+      document.getElementById('trainingTitle').innerText = details.title;  
+      const exercisesList = document.getElementById('trainingExercises');  
+      exercisesList.innerHTML = '';  
+      details.exercises.forEach(exercise => {  
+        const li = document.createElement('li');  
+        li.innerText = exercise;  
+        exercisesList.appendChild(li);  
+      });  
+      document.getElementById('trainingDetails').classList.remove('hidden');  
+    }  
+
+    // 饮食计划详细信息  
+    function showDietDetails(day) {  
+      const dietDetails = {  
+        monday: {  
+          title: "周一饮食计划",  
+          recipes: [  
+            "午餐：藜麦饭 + 鸡胸肉 + 清炒西兰花\n做法：将鸡胸肉煮熟，西兰花蒸熟，藜麦煮熟后混合。",  
+            "晚餐：红薯 + 三文鱼 + 蒜蓉菠菜\n做法：红薯蒸熟，三文鱼煎熟，菠菜炒蒜蓉。"  
+          ]  
+        },  
+        tuesday: {  
+          title: "周二饮食计划",  
+          recipes: [  
+            "午餐：糙米饭 + 清蒸鳕鱼 + 炒青椒\n做法：鳕鱼清蒸，青椒炒熟。",  
+            "晚餐：全麦面包 + 金枪鱼 + 牛油果沙拉\n做法：金枪鱼拌牛油果，搭配全麦面包。"  
+          ]  
+        },  
+        wednesday: {  
+          title: "周三饮食计划",  
+          recipes: [  
+            "午餐：意大利面 + 番茄酱 + 蔬菜\n做法：意大利面煮熟，搭配番茄酱和炒蔬菜。",  
+            "晚餐：鸡肉沙拉 + 酸奶\n做法：鸡肉煮熟切片，搭配生菜和酸奶。"  
+          ]  
+        },  
+        thursday: {  
+          title: "周四饮食计划",  
+          recipes: [  
+            "午餐：牛肉饭 + 蔬菜\n做法：牛肉煮熟，搭配米饭和蔬菜。",  
+            "晚餐：鱼片 + 蔬菜汤\n做法：鱼片煮熟，搭配清汤。"  
+          ]  
+        },  
+        friday: {  
+          title: "周五饮食计划",  
+          recipes: [  
+            "午餐：鸡肉卷 + 沙拉\n做法：鸡肉煮熟，卷入全麦饼中，搭配沙拉。",  
+            "晚餐：意大利面 + 蔬菜\n做法：意大利面煮熟，搭配炒蔬菜。"  
+          ]  
+        },  
+        saturday: {  
+          title: "周六饮食计划",  
+          recipes: [  
+            "午餐：豆腐 + 蔬菜\n做法：豆腐煮熟，搭配炒蔬菜。",  
+            "晚餐：牛肉 + 米饭\n做法：牛肉煮熟，搭配米饭。"  
+          ]  
+        },  
+        sunday: {  
+          title: "周日饮食计划",  
+          recipes: [  
+            "午餐：鸡肉 + 蔬菜\n做法：鸡肉煮熟，搭配炒蔬菜。",  
+            "晚餐：鱼 + 沙拉\n做法：鱼煮熟，搭配沙拉。"  
+          ]  
+        }  
+      };  
+
+      const details = dietDetails[day];  
+      document.getElementById('dietTitle').innerText = details.title;  
+      const recipesList = document.getElementById('dietRecipes');  
+      recipesList.innerHTML = '';  
+      details.recipes.forEach(recipe => {  
+        const li = document.createElement('li');  
+        li.innerText = recipe;  
+        recipesList.appendChild(li);  
+      });  
+      document.getElementById('dietDetails').classList.remove('hidden');  
+    }  
+
+    // 体重数据记录  
+    const localStorageKey = 'myWeightRecords';  
+    const weightListEl = document.getElementById('weightList');  
+    let chartInstance = null;  
+
+    function loadWeightData() {  
+      weightListEl.innerHTML = '';  
+      const dataString = localStorage.getItem(localStorageKey);  
+      if (!dataString) {  
+        updateChart([]);  
+        return;  
+      }  
+      const records = JSON.parse(dataString);  
+      records.slice().reverse().forEach(record => {  
+        const div = document.createElement('div');  
+        div.innerText = `${record.date} - ${record.weight} kg`;  
+        weightListEl.appendChild(div);  
+      });  
+      updateChart(records.slice(-7));  
+    }  
+
+    function addWeight() {  
+      const input = document.getElementById('weightInput');  
+      const weightValue = input.value.trim();  
+      if (!weightValue) {  
+        alert('请输入体重数值');  
+        return;  
+      }  
+      const dateString = new Date().toLocaleString('zh-CN', { hour12: false });  
+      const dataString = localStorage.getItem(localStorageKey);  
+      let records = dataString ? JSON.parse(dataString) : [];  
+      records.push({ date: dateString, weight: weightValue });  
+      localStorage.setItem(localStorageKey, JSON.stringify(records));  
+      input.value = '';  
+      loadWeightData();  
+    }  
+
+    function checkIn() {  
+      const dateString = new Date().toLocaleString('zh-CN', { hour12: false });  
+      const checkInMessage = `打卡成功！日期：${dateString}`;  
+      alert(checkInMessage);  
+    }  
+
+    function updateChart(data) {  
+      const ctx = document.getElementById('weightChart').getContext('2d');  
+      if (chartInstance) chartInstance.destroy();  
+      chartInstance = new Chart(ctx, {  
+        type: 'line',  
+        data: {  
+          labels: data.map(r => r.date.split(' ')[0].split('/').slice(-2).join('/')),  
+          datasets: [{  
+            label: '体重(kg)',  
+            data: data.map(r => r.weight),  
+            borderColor: '#14b8a6',  
+            backgroundColor: 'rgba(20, 184, 166, 0.2)',  
+            fill: true  
+          }]  
+        },  
+        options: {  
+          responsive: true,  
+          scales: {  
+            y: {  
+              beginAtZero: true  
+            }  
+          }  
+        }  
+      });  
+    }  
+
+    // 初始化加载体重数据  
+    loadWeightData();  
+  </script>  
+</body>  
+</html>
